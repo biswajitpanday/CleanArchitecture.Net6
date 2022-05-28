@@ -10,4 +10,10 @@
     <ProjectReference Include="..\CleanArchitecture.Core\CleanArchitecture.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Auth\" />
+    <Folder Include="Base\" />
+    <Folder Include="DbContext\" />
+  </ItemGroup>
+
 </Project>

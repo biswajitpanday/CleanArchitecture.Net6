@@ -14,4 +14,8 @@
     <ProjectReference Include="..\CleanArchitecture.Service\CleanArchitecture.Service.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Middleware\" />
+  </ItemGroup>
+
 </Project>
