@@ -1,6 +1,11 @@
+using CleanArchitecture.Api.Helpers;
+using DotNetCore.Logging;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Host.UseSerilog();
+builder.Services.RegisterSeriLog();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

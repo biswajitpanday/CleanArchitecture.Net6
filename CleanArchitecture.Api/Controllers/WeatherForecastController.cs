@@ -7,9 +7,7 @@ namespace CleanArchitecture.Api.Controllers
     public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
-        {
-        "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-    };
+        { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
 
         private readonly ILogger<WeatherForecastController> _logger;
 
@@ -21,6 +19,7 @@ namespace CleanArchitecture.Api.Controllers
         [HttpGet(Name = "GetWeatherForecast")]
         public IEnumerable<WeatherForecast> Get()
         {
+            _logger.LogInformation("Testing Serilog...");
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
                 Date = DateTime.Now.AddDays(index),
