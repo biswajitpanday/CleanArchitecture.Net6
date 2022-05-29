@@ -38,6 +38,7 @@ app.UseHttpsRedirection();
 app.UseRouting();
 app.UseResponseCompression();
 app.UseAuthorization();
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 app.MapControllers();
 
 app.Run();
