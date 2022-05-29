@@ -1,4 +1,6 @@
-﻿using CleanArchitecture.Repository.DatabaseContext;
+﻿using CleanArchitecture.Core.Interfaces;
+using CleanArchitecture.Repository.DatabaseContext;
+using CleanArchitecture.Service;
 using DotNetCore.IoC;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -45,7 +47,7 @@ public static class Extension
 
     public static void AddServices(this IServiceCollection services)
     {
-        //services.AddScoped<ITestService, TestService>();
+        services.AddScoped<IWeatherForecastService, WeatherForecastService>();
     }
 
     public static void AddRepositories(this IServiceCollection services)

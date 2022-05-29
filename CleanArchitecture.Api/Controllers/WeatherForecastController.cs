@@ -1,3 +1,4 @@
+using CleanArchitecture.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CleanArchitecture.Api.Controllers
@@ -6,14 +7,14 @@ namespace CleanArchitecture.Api.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-
         private readonly ILogger<WeatherForecastController> _logger;
+        private readonly IWeatherForecastService _weatherForecastService;
 
-        public WeatherForecastController(ILogger<WeatherForecastController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger,
+            IWeatherForecastService weatherForecastService)
         {
             _logger = logger;
+            _weatherForecastService = weatherForecastService;
         }
 
         [HttpGet(Name = "GetWeatherForecast")]
@@ -28,5 +29,19 @@ namespace CleanArchitecture.Api.Controllers
             })
             .ToArray();
         }
+
+        [HttpGet("TestAutoMapper")]
+        public ActionResult TestAutoMapper()
+        {
+            _logger.LogInformation("Testing AutoMapper...");
+            var data = _weatherForecastService.GetWeatherForecastAsync();
+            _logger.LogInformation("Success Testing AutoMapper...");
+            return Ok(data);
+        }
+
+
+        private static readonly string[] Summaries = { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+
+
     }
 }

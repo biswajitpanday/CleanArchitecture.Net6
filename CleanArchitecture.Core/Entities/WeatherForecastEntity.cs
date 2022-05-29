@@ -1,0 +1,16 @@
+namespace CleanArchitecture.Core.Entities;
+
+public class WeatherForecastEntity
+{
+    public string Id { get; set; } = null!;
+    public string? WeatherCondition { get; set; }
+    public long TemperatureInFh { get; set; }
+    public long TemperatureInCelsius { get; set; }
+    public long RainProbability { get; set; }
+    public string? WindDirection { get; set; }
+    public long WindSpeed { get; set; }
+    public long Humidity { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime LastUpdated { get; set; }
+    public bool IsDeleted { get; set; }
+}
