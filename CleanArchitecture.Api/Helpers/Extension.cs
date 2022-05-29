@@ -21,7 +21,7 @@ public static class Extension
         {
             option.SwaggerDoc("v1",
                 new OpenApiInfo
-                    {Title = "CleanArchitecture.Net6", Version = "v1", Description = "Onion Architecture Using .Net6"});
+                { Title = "CleanArchitecture.Net6", Version = "v1", Description = "Onion Architecture Using .Net6" });
         });
     }
 }
