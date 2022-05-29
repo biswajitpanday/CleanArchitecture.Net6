@@ -1,14 +1,16 @@
 using CleanArchitecture.Api.Helpers;
+using CleanArchitecture.Api.Middleware;
 using CleanArchitecture.Core.Converters;
+using CleanArchitecture.Core.Settings;
 using DotNetCore.Logging;
 using System.Text.Json.Serialization;
-using CleanArchitecture.Core.Settings;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog();
 
 builder.Services.RegisterSeriLog();
+builder.Services.AddResponseCompression();
 builder.Services.AddControllers(options => options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider()))
     .AddJsonOptions(options =>
     {
@@ -26,15 +28,16 @@ builder.Services.RegisterAutoMapper();
 builder.Configuration.GetSection("AppSettings").Get<AppSettings>();
 
 var app = builder.Build();
-
-app.UseCors("AppPolicy");
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors("AppPolicy");
 app.UseHttpsRedirection();
+app.UseRouting();
+app.UseResponseCompression();
 app.UseAuthorization();
 app.MapControllers();
+
 app.Run();
