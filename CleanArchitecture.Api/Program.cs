@@ -19,6 +19,7 @@ builder.Services.AddControllers(options => options.ModelBinderProviders.Insert(0
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.RegisterSwagger();
 builder.Services.AddCorsPolicy();
+builder.Services.AddDbContext();
 
 var app = builder.Build();
 

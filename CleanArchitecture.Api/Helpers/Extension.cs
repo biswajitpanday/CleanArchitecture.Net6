@@ -1,4 +1,7 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using CleanArchitecture.Repository.DatabaseContext;
+using DotNetCore.IoC;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 using Serilog;
 
 namespace CleanArchitecture.Api.Helpers;
@@ -30,5 +33,13 @@ public static class Extension
     {
         services.AddCors(option =>
             option.AddPolicy("AppPolicy", builder => { builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }));
+    }
+
+    public static void AddDbContext(this IServiceCollection services)
+    {
+        services.AddDbContext<ApplicationDbContext>(options =>
+        {
+            options.UseSqlServer(services.GetConnectionString("DefaultConnection"));
+        });
     }
 }
