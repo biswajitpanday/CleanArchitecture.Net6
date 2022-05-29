@@ -15,11 +15,14 @@ builder.Services.AddControllers(options => options.ModelBinderProviders.Insert(0
         options.JsonSerializerOptions.Converters.Add(new TrimStringConverter());
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
     });
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.RegisterSwagger();
+builder.Services.AddCorsPolicy();
 
 var app = builder.Build();
+
+app.UseCors("AppPolicy");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

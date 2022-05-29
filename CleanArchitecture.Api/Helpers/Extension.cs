@@ -15,6 +15,7 @@ public static class Extension
             .CreateLogger();
     }
 
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     public static void RegisterSwagger(this IServiceCollection services)
     {
         services.AddSwaggerGen(option =>
@@ -23,5 +24,11 @@ public static class Extension
                 new OpenApiInfo
                 { Title = "CleanArchitecture.Net6", Version = "v1", Description = "Onion Architecture Using .Net6" });
         });
+    }
+
+    public static void AddCorsPolicy(this IServiceCollection services)
+    {
+        services.AddCors(option =>
+            option.AddPolicy("AppPolicy", builder => { builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader(); }));
     }
 }
