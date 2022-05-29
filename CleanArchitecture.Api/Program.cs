@@ -21,6 +21,7 @@ builder.Services.RegisterSwagger();
 builder.Services.AddCorsPolicy();
 builder.Services.AddDbContext();
 builder.Services.AddServices();
+builder.Services.AddRepositories();
 
 var app = builder.Build();
 

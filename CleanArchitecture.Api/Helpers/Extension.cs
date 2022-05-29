@@ -47,4 +47,10 @@ public static class Extension
     {
         //services.AddScoped<ITestService, TestService>();
     }
+
+    public static void AddRepositories(this IServiceCollection services)
+    {
+        // services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+        // services.AddScoped<ITestRepository, TestRepository>();
+    }
 }
