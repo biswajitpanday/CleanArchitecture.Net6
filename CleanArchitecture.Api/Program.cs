@@ -20,6 +20,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.RegisterSwagger();
 builder.Services.AddCorsPolicy();
 builder.Services.AddDbContext();
+builder.Services.AddServices();
 
 var app = builder.Build();
 

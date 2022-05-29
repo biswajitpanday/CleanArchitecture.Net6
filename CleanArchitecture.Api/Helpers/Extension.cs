@@ -42,4 +42,9 @@ public static class Extension
             options.UseSqlServer(services.GetConnectionString("DefaultConnection"));
         });
     }
+
+    public static void AddServices(this IServiceCollection services)
+    {
+        //services.AddScoped<ITestService, TestService>();
+    }
 }
