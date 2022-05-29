@@ -22,22 +22,20 @@ builder.Services.AddCorsPolicy();
 builder.Services.AddDbContext();
 builder.Services.AddServices();
 builder.Services.AddRepositories();
+builder.Services.RegisterAutoMapper();
+
+
 
 var app = builder.Build();
 
 app.UseCors("AppPolicy");
-
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-
 app.UseHttpsRedirection();
-
 app.UseAuthorization();
-
 app.MapControllers();
-
 app.Run();

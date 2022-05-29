@@ -53,4 +53,11 @@ public static class Extension
         // services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
         // services.AddScoped<ITestRepository, TestRepository>();
     }
+
+    public static void RegisterAutoMapper(this IServiceCollection services)
+    {
+        services.AddAutoMapper(AppDomain.CurrentDomain
+            .GetAssemblies()
+            .Where(x => x.FullName!.StartsWith(nameof(CleanArchitecture))));    // ToDo: Change "CleanArchitecture" to "YOUR_PROJECT_BASE_NAMESPACE"
+    }
 }
