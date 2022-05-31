@@ -1,8 +1,7 @@
 namespace CleanArchitecture.Core.Entities;
 
-public class WeatherForecastEntity
+public class WeatherForecastEntity : BaseEntity
 {
-    public string Id { get; set; } = null!;
     public string? WeatherCondition { get; set; }
     public long TemperatureInFh { get; set; }
     public long TemperatureInCelsius { get; set; }
