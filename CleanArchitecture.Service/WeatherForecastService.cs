@@ -18,7 +18,7 @@ public class WeatherForecastService : IWeatherForecastService
     {
         var weatherForecastData = new WeatherForecastEntity
         {
-            Id = Guid.NewGuid().ToString(),
+            //Id = Guid.NewGuid().ToString(),
             WeatherCondition = "Cloudy",
             TemperatureInFh = 32,
             TemperatureInCelsius = 89,
