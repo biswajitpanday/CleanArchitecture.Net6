@@ -4,12 +4,11 @@ using CleanArchitecture.Core.Interfaces.Repositories;
 using CleanArchitecture.Repository.DatabaseContext;
 using DotNetCore.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace CleanArchitecture.Repository.Base
 {
-    public sealed class BaseRepository<T> : EFRepository<T>, IBaseRepository<T> where T : BaseEntity
+    public class BaseRepository<T> : EFRepository<T>, IBaseRepository<T> where T : BaseEntity
     {
         private readonly ApplicationDbContext _context;
         private readonly DbSet<T> _dbSet;
@@ -194,5 +193,8 @@ namespace CleanArchitecture.Repository.Base
         public new IEnumerable<T> List() => _queryable!.ToList<T>();
 
         public new async Task<IEnumerable<T>> ListAsync() => await _queryable!.ToListAsync<T>().ConfigureAwait(false);
+
+        public async Task SaveChangesAsync() => await _context.SaveChangesAsync();
+        public void Save() => _context.SaveChanges();
     }
 }

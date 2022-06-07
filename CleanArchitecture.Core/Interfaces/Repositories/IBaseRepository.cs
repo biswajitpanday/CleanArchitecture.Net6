@@ -36,5 +36,7 @@ namespace CleanArchitecture.Core.Interfaces.Repositories
         Task<T?> GetAsync(Guid key);
         new IEnumerable<T> List();
         new Task<IEnumerable<T>> ListAsync();
+        Task SaveChangesAsync();
+        void Save();
     }
 }
