@@ -1,4 +1,7 @@
 ﻿using CleanArchitecture.Core.Interfaces;
+using CleanArchitecture.Core.Interfaces.Repositories;
+using CleanArchitecture.Repository;
+using CleanArchitecture.Repository.Base;
 using CleanArchitecture.Repository.DatabaseContext;
 using CleanArchitecture.Service;
 using DotNetCore.IoC;
@@ -10,7 +13,7 @@ namespace CleanArchitecture.Api.Helpers;
 
 public static class Extension
 {
-    public static void RegisterSeriLog(this IServiceCollection services)
+    public static void RegisterSeriLog()
     {
         var config = new ConfigurationBuilder()
             .AddJsonFile("serilogconfig.json")
@@ -47,13 +50,13 @@ public static class Extension
 
     public static void AddServices(this IServiceCollection services)
     {
-        services.AddScoped<IWeatherForecastService, WeatherForecastService>();
+        services.AddTransient<IWeatherForecastService, WeatherForecastService>();
     }
 
     public static void AddRepositories(this IServiceCollection services)
     {
-        // services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-        // services.AddScoped<ITestRepository, TestRepository>();
+        services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+        services.AddScoped<IWeatherForecastRepository, WeatherForecastRepository>();
     }
 
     public static void RegisterAutoMapper(this IServiceCollection services)

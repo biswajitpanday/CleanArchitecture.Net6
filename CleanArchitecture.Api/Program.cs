@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Host.UseSerilog();
 
-builder.Services.RegisterSeriLog();
+Extension.RegisterSeriLog();
 builder.Services.AddResponseCompression();
 builder.Services.AddControllers(options => options.ModelBinderProviders.Insert(0, new CustomModelBinderProvider()))
     .AddJsonOptions(options =>
