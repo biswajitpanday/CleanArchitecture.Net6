@@ -1,3 +1,4 @@
+using CleanArchitecture.Core.Dtos;
 using CleanArchitecture.Core.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,31 +18,21 @@ namespace CleanArchitecture.Api.Controllers
             _weatherForecastService = weatherForecastService;
         }
 
-        [HttpGet(Name = "GetWeatherForecast")]
-        public IEnumerable<WeatherForecast> Get()
+        [HttpGet]
+        public async Task<ActionResult<WeatherForecastDto>> Get()
         {
-            _logger.LogInformation("Testing Serilog...");
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = Random.Shared.Next(-20, 55),
-                Summary = Summaries[Random.Shared.Next(Summaries.Length)]
-            })
-            .ToArray();
-        }
-
-        [HttpGet("TestAutoMapper")]
-        public ActionResult TestAutoMapper()
-        {
-            _logger.LogInformation("Testing AutoMapper...");
-            var data = _weatherForecastService.GetWeatherForecastAsync();
-            _logger.LogInformation("Success Testing AutoMapper...");
+            _logger.LogInformation("Collecting WeatherForecast List...");
+            var data = await _weatherForecastService.GetWeatherForecastAsync();
             return Ok(data);
         }
 
-
-        private static readonly string[] Summaries = { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-
-
+        [HttpPost]
+        public async Task<ActionResult<List<WeatherForecastDto>>> Create()
+        {
+            _logger.LogInformation("Creating WeatherForecast...");
+            var data = await _weatherForecastService.StoreWeatherForecastAsync();
+            _logger.LogInformation("Success Creating WeatherForecast...");
+            return Ok(data);
+        }
     }
 }

@@ -4,5 +4,6 @@ namespace CleanArchitecture.Core.Interfaces;
 
 public interface IWeatherForecastService
 {
-    public WeatherForecastDto GetWeatherForecastAsync();
+    Task<List<WeatherForecastDto>> GetWeatherForecastAsync();
+    Task<WeatherForecastDto> StoreWeatherForecastAsync();
 }
