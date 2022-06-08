@@ -6,4 +6,5 @@ public interface IWeatherForecastService
 {
     Task<List<WeatherForecastDto>> GetWeatherForecastAsync();
     Task<WeatherForecastDto> StoreWeatherForecastAsync();
+    Task<WeatherForecastDto> Update(WeatherForecastDto model);
 }

@@ -3,17 +3,20 @@ using CleanArchitecture.Core.Dtos;
 using CleanArchitecture.Core.Entities;
 using CleanArchitecture.Core.Interfaces;
 using CleanArchitecture.Core.Interfaces.Repositories;
+using Microsoft.Extensions.Logging;
 
 namespace CleanArchitecture.Service;
 
 public class WeatherForecastService : IWeatherForecastService
 {
+    private readonly ILogger<WeatherForecastService> _logger;
     private readonly IMapper _mapper;
     private readonly IWeatherForecastRepository _weatherForecastRepository;
 
-    public WeatherForecastService(IMapper mapper,
+    public WeatherForecastService(ILogger<WeatherForecastService> logger, IMapper mapper,
         IWeatherForecastRepository weatherForecastRepository)
     {
+        _logger = logger;
         _mapper = mapper;
         _weatherForecastRepository = weatherForecastRepository;
     }
@@ -40,11 +43,20 @@ public class WeatherForecastService : IWeatherForecastService
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            _logger.LogError($"Error Storing Data. Error: {e.Message} \n StackTrace: {e.StackTrace}");
         }
-        
         return _mapper.Map<WeatherForecastDto>(weatherForecastData);
+    }
+
+    public async Task<WeatherForecastDto> Update(WeatherForecastDto model)
+    {
+        var toUpdate = await _weatherForecastRepository.GetAsync(Guid.Parse(model.Id));
+        if (toUpdate == null)
+            throw new Exception($"Weather forecast with Id {model.Id} not found.");
+        toUpdate = _mapper.Map<WeatherForecastEntity>(model);
+        await _weatherForecastRepository.UpdateAsync(toUpdate);
+        await _weatherForecastRepository.SaveChangesAsync();
+        return _mapper.Map<WeatherForecastDto>(toUpdate);
     }
 
     public async Task<List<WeatherForecastDto>> GetWeatherForecastAsync()
