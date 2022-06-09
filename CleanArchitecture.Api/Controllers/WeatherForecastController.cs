@@ -45,4 +45,13 @@ public class WeatherForecastController : ControllerBase
         _logger.LogInformation("Success Updating WeatherForecast...");
         return Ok(data);
     }
+
+    [HttpDelete]
+    public async Task<ActionResult<List<WeatherForecastDto>>> Delete(Guid id)
+    {
+        _logger.LogInformation($"Deleting WeatherForecast of Id {id}");
+        var data = await _weatherForecastService.Delete(id);
+        _logger.LogInformation("Success Deleting WeatherForecast...");
+        return Ok(data);
+    }
 }

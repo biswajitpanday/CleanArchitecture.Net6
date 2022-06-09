@@ -7,9 +7,9 @@ namespace CleanArchitecture.Repository
 {
     public class WeatherForecastRepository : BaseRepository<WeatherForecastEntity>, IWeatherForecastRepository
     {
-        public WeatherForecastRepository(ApplicationDbContext context): base(context)
+        public WeatherForecastRepository(ApplicationDbContext context) : base(context)
         {
-            
+
         }
     }
 }

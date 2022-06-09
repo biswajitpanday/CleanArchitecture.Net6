@@ -7,4 +7,5 @@ public interface IWeatherForecastService
     Task<List<WeatherForecastDto>> GetWeatherForecastAsync();
     Task<WeatherForecastDto> StoreWeatherForecastAsync();
     Task<WeatherForecastDto> Update(WeatherForecastDto model);
+    Task<bool> Delete(Guid id);
 }

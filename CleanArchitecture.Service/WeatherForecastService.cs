@@ -21,6 +21,12 @@ public class WeatherForecastService : IWeatherForecastService
         _weatherForecastRepository = weatherForecastRepository;
     }
 
+    public async Task<List<WeatherForecastDto>> GetWeatherForecastAsync()
+    {
+        var response = await _weatherForecastRepository.ListAsync();
+        return _mapper.Map<List<WeatherForecastDto>>(response);
+    }
+
     public async Task<WeatherForecastDto> StoreWeatherForecastAsync()
     {
         var weatherForecastData = new WeatherForecastEntity
@@ -59,9 +65,10 @@ public class WeatherForecastService : IWeatherForecastService
         return _mapper.Map<WeatherForecastDto>(toUpdate);
     }
 
-    public async Task<List<WeatherForecastDto>> GetWeatherForecastAsync()
+    public async Task<bool> Delete(Guid id)
     {
-        var response = await _weatherForecastRepository.ListAsync();
-        return _mapper.Map<List<WeatherForecastDto>>(response);
+        await _weatherForecastRepository.SoftDeleteAsync(id);
+        await _weatherForecastRepository.SaveChangesAsync();
+        return true;
     }
 }

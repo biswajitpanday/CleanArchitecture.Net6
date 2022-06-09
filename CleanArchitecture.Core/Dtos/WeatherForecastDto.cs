@@ -13,4 +13,7 @@ public class WeatherForecastDto : IMapFrom<WeatherForecastEntity>
     public string? WindDirection { get; set; }
     public long WindSpeed { get; set; }
     public long Humidity { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime LastUpdate { get; set; }
+    public bool IsDeleted { get; set; }
 }
