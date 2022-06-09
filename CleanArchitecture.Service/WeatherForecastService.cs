@@ -21,13 +21,19 @@ public class WeatherForecastService : IWeatherForecastService
         _weatherForecastRepository = weatherForecastRepository;
     }
 
-    public async Task<List<WeatherForecastDto>> GetWeatherForecastAsync()
+    public async Task<List<WeatherForecastDto>> Get()
     {
         var response = await _weatherForecastRepository.ListAsync();
         return _mapper.Map<List<WeatherForecastDto>>(response);
     }
 
-    public async Task<WeatherForecastDto> StoreWeatherForecastAsync()
+    public async Task<WeatherForecastDto> Get(Guid id)
+    {
+        var response = await _weatherForecastRepository.GetAsync(id);
+        return _mapper.Map<WeatherForecastDto>(response);
+    }
+
+    public async Task<WeatherForecastDto> Create()
     {
         var weatherForecastData = new WeatherForecastEntity
         {

@@ -18,7 +18,7 @@ public class BaseRepository<T> : EFRepository<T>, IBaseRepository<T> where T : B
     {
         _context = context;
         _dbSet = _context.Set<T>();
-        _queryable = _context.QuerySet<T?>();
+        _queryable = _context.QuerySet<T?>().Where(x => !x!.IsDeleted);
     }
 
     // Commands

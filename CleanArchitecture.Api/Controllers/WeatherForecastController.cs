@@ -20,25 +20,34 @@ public class WeatherForecastController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<WeatherForecastDto>> Get()
+    public async Task<ActionResult<List<WeatherForecastDto>>> Get()
     {
         _logger.LogInformation("Collecting WeatherForecast List...");
-        var data = await _weatherForecastService.GetWeatherForecastAsync();
-        _logger.LogInformation($"Success Collecting WeatherForecast List. Data: {JsonConvert.SerializeObject(data)}");
+        var data = await _weatherForecastService.Get();
+        _logger.LogInformation($"Success Collecting WeatherForecast List. \nData: {JsonConvert.SerializeObject(data)}");
+        return Ok(data);
+    }
+
+    [HttpGet("id")]
+    public async Task<ActionResult<WeatherForecastDto>> Get(Guid id)
+    {
+        _logger.LogInformation($"Collecting WeatherForecast Data of Id {id}");
+        var data = await _weatherForecastService.Get(id);
+        _logger.LogInformation($"Success Collecting WeatherForecast Data. \nData: {JsonConvert.SerializeObject(data)}");
         return Ok(data);
     }
 
     [HttpPost]
-    public async Task<ActionResult<List<WeatherForecastDto>>> Create()
+    public async Task<ActionResult<WeatherForecastDto>> Create()
     {
         _logger.LogInformation("Creating WeatherForecast...");
-        var data = await _weatherForecastService.StoreWeatherForecastAsync();
+        var data = await _weatherForecastService.Create();
         _logger.LogInformation("Success Creating WeatherForecast...");
         return Ok(data);
     }
 
     [HttpPut]
-    public async Task<ActionResult<List<WeatherForecastDto>>> Update(WeatherForecastDto model)
+    public async Task<ActionResult<WeatherForecastDto>> Update(WeatherForecastDto model)
     {
         _logger.LogInformation("Updating WeatherForecast...");
         var data = await _weatherForecastService.Update(model);
@@ -46,8 +55,8 @@ public class WeatherForecastController : ControllerBase
         return Ok(data);
     }
 
-    [HttpDelete]
-    public async Task<ActionResult<List<WeatherForecastDto>>> Delete(Guid id)
+    [HttpDelete("id")]
+    public async Task<ActionResult<bool>> Delete(Guid id)
     {
         _logger.LogInformation($"Deleting WeatherForecast of Id {id}");
         var data = await _weatherForecastService.Delete(id);
