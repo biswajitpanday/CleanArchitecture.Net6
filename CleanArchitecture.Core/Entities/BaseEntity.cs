@@ -2,9 +2,9 @@
 
 namespace CleanArchitecture.Core.Entities;
 
-public class BaseEntity: Entity<Guid>
+public class BaseEntity : Entity<Guid>
 {
-    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
-    public DateTime LastUpdate { get; set; } = DateTime.UtcNow;
-    public bool IsDeleted { get; set; } = false;
+    public DateTime CreatedAt { get; set; }
+    public DateTime LastUpdate { get; set; }
+    public bool IsDeleted { get; set; }
 }
