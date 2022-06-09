@@ -1,10 +1,10 @@
-﻿using System.Linq.Expressions;
-using CleanArchitecture.Core.Entities;
+﻿using CleanArchitecture.Core.Entities;
 using CleanArchitecture.Core.Interfaces.Repositories;
 using CleanArchitecture.Repository.DatabaseContext;
 using DotNetCore.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using System.Linq.Expressions;
 
 namespace CleanArchitecture.Repository.Base;
 
@@ -37,16 +37,6 @@ public class BaseRepository<T> : EFRepository<T>, IBaseRepository<T> where T : B
             return;
         _dbSet.Remove(entity);
     }
-
-    public void SoftDelete(object key)
-    {
-        var entity = _dbSet.Find(key);
-        if (entity == null)
-            return;
-        entity.IsDeleted = true;
-        UpdatePartial(entity);
-    }
-
     public void HardDelete(Expression<Func<T, bool>> where)
     {
         var queryable = _dbSet.Where<T>(where);
@@ -54,36 +44,31 @@ public class BaseRepository<T> : EFRepository<T>, IBaseRepository<T> where T : B
             return;
         _dbSet.RemoveRange(queryable);
     }
+    public Task HardDeleteAsync(object key) => Task.Run((Action)(() => HardDelete(key)));
+    public Task HardDeleteAsync(Expression<Func<T, bool>> where) => Task.Run((Action)(() => HardDelete(where)));
 
+
+    public void SoftDelete(object key)
+    {
+        var entity = _dbSet.Find(key);
+        if (entity == null)
+            return;
+        entity.IsDeleted = true;
+        _context.Entry<T>(entity).State = EntityState.Modified;
+    }
     public void SoftDelete(Expression<Func<T, bool>> where)
     {
         var queryable = _dbSet.Where<T>(where);
         if (!queryable.Any<T>())
             return;
         foreach (var entity in queryable)
+        {
             entity.IsDeleted = true;
-        UpdateRange(queryable);
+            _context.Entry<T>(entity).State = EntityState.Modified;
+        }
     }
-
-    public Task HardDeleteAsync(object key)
-    {
-        return Task.Run((Action)(() => HardDelete(key)));
-    }
-
-    public Task SoftDeleteAsync(object key)
-    {
-        return Task.Run((Action)(() => SoftDelete(key)));
-    }
-
-    public Task HardDeleteAsync(Expression<Func<T, bool>> where)
-    {
-        return Task.Run((Action)(() => HardDelete(where)));
-    }
-
-    public Task SoftDeleteAsync(Expression<Func<T, bool>> where)
-    {
-        return Task.Run((Action)(() => SoftDelete(where)));
-    }
+    public Task SoftDeleteAsync(object key) => Task.Run((Action)(() => SoftDelete(key)));
+    public Task SoftDeleteAsync(Expression<Func<T, bool>> where) => Task.Run((Action)(() => SoftDelete(where)));
 
     public new void Update(T item)
     {
@@ -94,7 +79,7 @@ public class BaseRepository<T> : EFRepository<T>, IBaseRepository<T> where T : B
         _context.Update<T>(item);
     }
 
-    public new Task UpdateAsync(T item) => Task.Run((Action) (() => Update(item)));
+    public new Task UpdateAsync(T item) => Task.Run((Action)(() => Update(item)));
 
     public new void UpdatePartial(object item)
     {
@@ -105,7 +90,7 @@ public class BaseRepository<T> : EFRepository<T>, IBaseRepository<T> where T : B
         entityEntry.CurrentValues.SetValues(item);
         foreach (var navigation in entityEntry.Metadata.GetNavigations())
         {
-            if (!navigation.IsOnDependent && !((IReadOnlyNavigation) navigation).IsCollection &&
+            if (!navigation.IsOnDependent && !((IReadOnlyNavigation)navigation).IsCollection &&
                 navigation.ForeignKey.IsOwnership)
             {
                 var property = item.GetType().GetProperty(navigation.Name);
@@ -119,11 +104,11 @@ public class BaseRepository<T> : EFRepository<T>, IBaseRepository<T> where T : B
         }
     }
 
-    public new Task UpdatePartialAsync(object item) => Task.Run((Action) (() => UpdatePartial(item)));
+    public new Task UpdatePartialAsync(object item) => Task.Run((Action)(() => UpdatePartial(item)));
 
     public new void UpdateRange(IEnumerable<T> items) => _dbSet.UpdateRange(items);
 
-    public new Task UpdateRangeAsync(IEnumerable<T> items) => Task.Run((Action) (() => UpdateRange(items)));
+    public new Task UpdateRangeAsync(IEnumerable<T> items) => Task.Run((Action)(() => UpdateRange(items)));
 
 
     // Queries

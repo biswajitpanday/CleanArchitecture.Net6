@@ -1,6 +1,6 @@
-﻿using System.Linq.Expressions;
-using CleanArchitecture.Core.Entities;
+﻿using CleanArchitecture.Core.Entities;
 using DotNetCore.Repositories;
+using System.Linq.Expressions;
 
 namespace CleanArchitecture.Core.Interfaces.Repositories;
 
