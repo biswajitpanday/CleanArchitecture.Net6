@@ -1,9 +1,12 @@
+using CleanArchitecture.Core.Constants;
 using CleanArchitecture.Core.Dtos;
 using CleanArchitecture.Core.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 
 namespace CleanArchitecture.Api.Controllers;
+
 
 [ApiController]
 [Route("[controller]")]
@@ -19,6 +22,7 @@ public class WeatherForecastController : ControllerBase
         _weatherForecastService = weatherForecastService;
     }
 
+    [Authorize]
     [HttpGet]
     public async Task<ActionResult<List<WeatherForecastDto>>> Get()
     {
@@ -37,6 +41,7 @@ public class WeatherForecastController : ControllerBase
         return Ok(data);
     }
 
+    [Authorize(Roles = UserRoles.Admin)]
     [HttpPost]
     public async Task<ActionResult<WeatherForecastDto>> Create()
     {
