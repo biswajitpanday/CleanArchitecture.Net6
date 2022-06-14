@@ -1,11 +1,15 @@
-﻿using CleanArchitecture.Core.Interfaces;
+﻿using System.Text;
+using CleanArchitecture.Core.Interfaces;
 using CleanArchitecture.Core.Interfaces.Repositories;
 using CleanArchitecture.Repository;
 using CleanArchitecture.Repository.Base;
 using CleanArchitecture.Repository.DatabaseContext;
 using CleanArchitecture.Service;
 using DotNetCore.IoC;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 
@@ -31,6 +35,29 @@ public static class Extension
             option.SwaggerDoc("v1",
                 new OpenApiInfo
                 { Title = "CleanArchitecture.Net6", Version = "v1", Description = "Onion Architecture Using .Net6" });
+            option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                In = ParameterLocation.Header,
+                Description = "Please enter a valid token",
+                Name = "Authorization",
+                Type = SecuritySchemeType.Http,
+                BearerFormat = "JWT",
+                Scheme = "Bearer"
+            });
+            option.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                    new OpenApiSecurityScheme
+                    {
+                        Reference = new OpenApiReference
+                        {
+                            Type=ReferenceType.SecurityScheme,
+                            Id="Bearer"
+                        }
+                    },
+                    new string[]{}
+                }
+            });
         });
     }
 
@@ -46,6 +73,40 @@ public static class Extension
         {
             options.UseSqlServer(services.GetConnectionString("DefaultConnection"));
         });
+    }
+    public static void RegisterIdentity(this IServiceCollection services)
+    {
+        services.AddIdentityCore<IdentityUser>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireLowercase = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+            })
+            .AddRoles<IdentityRole>()
+            .AddRoleManager<RoleManager<IdentityRole>>()
+            .AddSignInManager<SignInManager<IdentityUser>>()
+            .AddRoleValidator<RoleValidator<IdentityRole>>()
+            .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddDefaultTokenProviders();
+    }
+    public static void RegisterAuthentication(this WebApplicationBuilder builder)
+    {
+        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey =
+                        new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"])),
+                    ValidateIssuer = false,
+                    ValidIssuer = builder.Configuration["JWT:ValidIssuer"],
+                    ValidateAudience = false,
+                    ValidAudience = builder.Configuration["JWT:ValidAudience"],
+                };
+            });
     }
 
     public static void AddServices(this IServiceCollection services)
