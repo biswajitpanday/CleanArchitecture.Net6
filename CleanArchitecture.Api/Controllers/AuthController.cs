@@ -105,7 +105,7 @@ public class AuthController: ControllerBase
                 await _roleManager.CreateAsync(new IdentityRole(userRole));
 
         foreach (var userRole in userRoles)
-            if (!await _roleManager.RoleExistsAsync(userRole))
+            if (await _roleManager.RoleExistsAsync(userRole))
                 await _userManager.AddToRoleAsync(user, userRole);
 
         return Ok(new ApiResponseDto<object> { IsSuccess = true, Message = "User created successfully" });
@@ -116,9 +116,9 @@ public class AuthController: ControllerBase
     {
         var authSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]));
         var token = new JwtSecurityToken(
-            //issuer: _configuration["JWT:ValidIssuer"],
-            //audience: _configuration["JWT:ValidAudience"],
-            expires: DateTime.Now.AddHours(3),
+            issuer: _configuration["JWT:ValidIssuer"],
+            audience: _configuration["JWT:ValidAudience"],
+            expires: DateTime.Now.AddHours(24),
             claims: authClaims,
             signingCredentials: new SigningCredentials(authSigningKey, SecurityAlgorithms.HmacSha256)
         );
