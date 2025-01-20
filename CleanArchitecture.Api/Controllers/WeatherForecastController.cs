@@ -51,6 +51,7 @@ public class WeatherForecastController : ControllerBase
         return Ok(data);
     }
 
+    [Authorize(Roles = UserRoles.Admin)]
     [HttpPut]
     public async Task<ActionResult<WeatherForecastDto>> Update(WeatherForecastDto model)
     {
@@ -60,6 +61,7 @@ public class WeatherForecastController : ControllerBase
         return Ok(data);
     }
 
+    [Authorize(Roles = UserRoles.Admin)]
     [HttpDelete("id")]
     public async Task<ActionResult<bool>> Delete(Guid id)
     {
