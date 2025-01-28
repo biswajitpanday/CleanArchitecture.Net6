@@ -1,6 +1,8 @@
-# CleanArchitecture.Net6
+# Clean Architecture in .NET 6
 
-A sample implementation of the Clean Architecture pattern using .NET 6. This repository demonstrates how to structure a .NET application following best practices, ensuring maintainability, scalability, and testability.
+## About the Project
+This repository demonstrates the implementation of a Clean Architecture pattern in .NET 6. 
+It provides a modular, scalable, and testable solution for enterprise-level applications.
 
 ---
 
